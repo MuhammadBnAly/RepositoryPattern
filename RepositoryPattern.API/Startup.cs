@@ -7,7 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RepositoryPattern.Core.Interfaces;
 using RepositoryPattern.EF;
+using RepositoryPattern.EF.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +32,10 @@ namespace RepositoryPattern.API
             services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
             b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
+
+            services.AddTransient(typeof(IBaseRepository<>),typeof( BaseRepository<>));
+            //services.AddScoped<IBaseRepository, BaseRepository>();
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
